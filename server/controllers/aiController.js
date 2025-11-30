@@ -7,8 +7,8 @@ import axios from "axios";
 import FormData from 'form-data'
 import { createRequire } from "module";
 
-const require = createRequire(import.meta.url);
-const pdf = require("pdf-parse");
+// const require = createRequire(import.meta.url);
+// const pdf = require("pdf-parse");
 
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -434,23 +434,23 @@ export const removeImageObject = async (req, res) => {
 //   }
 // };
 
-export const resumeReview = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.json({ success: false, message: "PDF is required" });
-    }
+// export const resumeReview = async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.json({ success: false, message: "PDF is required" });
+//     }
 
-    const dataBuffer = fs.readFileSync(req.file.path);
-    const data = await pdf(dataBuffer);
+//     const dataBuffer = fs.readFileSync(req.file.path);
+//     const data = await pdf(dataBuffer);
 
-    console.log(data.text);  // ✅ THIS WORKS
-    res.json({ success: true, text: data.text });
+//     console.log(data.text);  // ✅ THIS WORKS
+//     res.json({ success: true, text: data.text });
 
-  } catch (error) {
-    console.log(error.message);
-    res.json({ success: false, message: error.message });
-  }
-};
+//   } catch (error) {
+//     console.log(error.message);
+//     res.json({ success: false, message: error.message });
+//   }
+// };
 
 // export const resumeReview = async (req, res)=>{
 
