@@ -239,6 +239,7 @@ export const generateImage = async (req, res) => {
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
+    const {object} = req.body;
     const image = req.file;
     const plan = req.plan;
 
@@ -281,58 +282,14 @@ export const removeImageBackground = async (req, res) => {
   }
 };
 
-// export const removeImageObject = async (req, res) => {
-//   try {
-//     const { userId } = req.auth();
-//     const { object } = req.body;
-//     const plan = req.plan;
-//     const image = req.file;
-
-//     // REQUIRED FIX ✅
-//     if (!image) {
-//       return res.json({ success: false, message: "Image is required" });
-//     }
-
-//     if (!object) {
-//       return res.json({ success: false, message: "Object name is required" });
-//     }
-
-//     if (plan !== 'premium') {
-//       return res.json({
-//         success: false,
-//         message: "This feature is only available for premium subscription"
-//       });
-//     }
-
-//     const { public_id } = await cloudinary.uploader.upload(image.path);
-
-    
-//     const imageUrl = cloudinary.url(public_id, {
-//       transformation: [
-//         { effect: `gen_remove:${object}` }
-//       ],
-//       resource_type: 'image'
-//     });
-
-//     await sql`
-//       INSERT INTO Creations (user_id, prompt, content, type)
-//       VALUES (${userId}, ${`Removed ${object} from image`}, ${imageUrl}, 'image')
-//     `;
-
-//     res.json({ success: true, content: imageUrl });
-
-//   } catch (error) {
-//     console.log(error.message);
-//     res.json({ success: false, message: error.message });
-//   }
-// };
-
 export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object } = req.body;
+    const plan = req.plan;
     const image = req.file;
 
+    // REQUIRED FIX ✅
     if (!image) {
       return res.json({ success: false, message: "Image is required" });
     }
@@ -341,49 +298,94 @@ export const removeImageObject = async (req, res) => {
       return res.json({ success: false, message: "Object name is required" });
     }
 
-    // 1. Send image to ClipDrop
-    const formData = new FormData();
-    formData.append("image_file", fs.createReadStream(image.path));
-    formData.append("mask", object); // object to remove
+    if (plan !== 'premium') {
+      return res.json({
+        success: false,
+        message: "This feature is only available for premium subscription"
+      });
+    }
 
-    const response = await axios.post(
-      "https://clipdrop-api.co/remove-object/v1",
-      formData,
-      {
-        headers: {
-          ...formData.getHeaders(),
-          "x-api-key": process.env.CLIPDROP_API_KEY
-        },
-        responseType: "arraybuffer"
-      }
-    );
+    const { public_id } = await cloudinary.uploader.upload(image.path);
 
-    // 2. Save temp file
-    const outputPath = `removed_${Date.now()}.png`;
-    fs.writeFileSync(outputPath, response.data);
-
-    // 3. Upload result to Cloudinary
-    const result = await cloudinary.uploader.upload(outputPath, {
-      folder: "ai-edits"
+    
+    const imageUrl = cloudinary.url(public_id, {
+      transformation: [
+        { effect: `gen_remove:${object}` }
+      ],
+      resource_type: 'image'
     });
 
-    // 4. Save to DB
     await sql`
       INSERT INTO Creations (user_id, prompt, content, type)
-      VALUES (${userId}, ${`Removed ${object} from image`}, ${result.secure_url}, 'image')
+      VALUES (${userId}, ${`Removed ${object} from image`}, ${imageUrl}, 'image')
     `;
 
-    // 5. Clean up
-    fs.unlinkSync(outputPath);
-    fs.unlinkSync(image.path);
-
-    res.json({ success: true, content: result.secure_url });
+    res.json({ success: true, content: imageUrl });
 
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
   }
 };
+
+// export const removeImageObject = async (req, res) => {
+//   try {
+//     const { userId } = req.auth();
+//     const { object } = req.body;
+//     const image = req.file;
+
+//     if (!image) {
+//       return res.json({ success: false, message: "Image is required" });
+//     }
+
+//     if (!object) {
+//       return res.json({ success: false, message: "Object name is required" });
+//     }
+
+//     // 1. Send image to ClipDrop
+//     const formData = new FormData();
+//     formData.append("image_file", fs.createReadStream(image.path));
+//     formData.append("mask", object); // object to remove
+
+//     const response = await axios.post(
+//       "https://clipdrop-api.co/remove-object/v1",
+//       formData,
+//       {
+//         headers: {
+//           ...formData.getHeaders(),
+//           "x-api-key": process.env.CLIPDROP_API_KEY
+//         },
+//         responseType: "arraybuffer"
+//       }
+//     );
+
+//     // 2. Save temp file
+//     const outputPath = `removed_${Date.now()}.png`;
+//     fs.writeFileSync(outputPath, response.data);
+
+//     // 3. Upload result to Cloudinary
+//     const result = await cloudinary.uploader.upload(outputPath, {
+//       folder: "ai-edits"
+//     });
+
+//     // 4. Save to DB
+//     await sql`
+//       INSERT INTO Creations (user_id, prompt, content, type)
+//       VALUES (${userId}, ${`Removed ${object} from image`}, ${result.secure_url}, 'image')
+//     `;
+
+//     // 5. Clean up
+//     fs.unlinkSync(outputPath);
+//     fs.unlinkSync(image.path);
+
+//     res.json({ success: true, content: result.secure_url });
+
+//   } catch (error) {
+//     console.log(error.message);
+//     res.json({ success: false, message: error.message });
+//   }
+// };
+
 // export const removeImageObject = async (req, res) => {
 //   try {
 //     const { userId } = req.auth();

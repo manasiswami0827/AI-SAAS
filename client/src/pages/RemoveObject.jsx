@@ -35,7 +35,7 @@ const RemoveObject = () => {
       if (data.success) {
         setContent(data.content);
       } else {
-        toast.error(data.message);
+        toast.error(error.message);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);

@@ -60,10 +60,10 @@ const Community = () => {
   }, [user])
 
   return !loading ? (
-    <div className='flex-1 h-full flex flex-col gap-4 p-6'>
+    <div className='flex-1 h-full flex flex-col gap-4 p-6 '>
       Creations
 
-      <div className='bg-white h-full w-full rounded-xl overflow-y-scroll'>
+      <div className=' h-full w-full rounded-xl overflow-y-scroll bg-white'>
         {creations.map((creation) => {
           const liked = user?.id && Array.isArray(creation.likes) && creation.likes.includes(user.id);
           return (
@@ -77,7 +77,7 @@ const Community = () => {
               />
 
               <div className='absolute inset-0 flex gap-2 items-end justify-end group-hover:justify-between p-3
-                group-hover:bg-gradient-to-b from-transparent to-black/80 text-white rounded-lg'>
+                group-hover:bg-gradient-to-b from-transparent to-black/80 text-white rounded-lg '>
                 <p className='text-sm hidden group-hover:block'>{creation.prompt}</p>
 
                 <div className='flex gap-1 items-center'>
@@ -88,7 +88,7 @@ const Community = () => {
                     onClick={() => imageLikeToggle(creation.id)}
                     className={`h-5 w-5 ${liked ? 'text-red-500' : 'text-white'}`}
                   >
-                    <Heart fill={liked ? 'red' : 'none'} />
+                    <Heart onClick={()=> imageLikeToggle(creation.id)} className={`min-w-5 hover:scale-110 cursor-pointer ${creation.likes.includes(user.id) ?'fill-red-500 text-red-600' : 'text-white'} }`}  />
                   </button>
 
                 </div>
