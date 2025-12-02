@@ -1,22 +1,49 @@
 import React from 'react'
-import {useNavigate} from 'react-router-dom'
-import {assets} from '../assets/assets'
+import { useNavigate } from 'react-router-dom'
+import { assets } from '../assets/assets'
+
 const Hero = () => {
-
   const navigate = useNavigate()
-  return (
-    <div className='px-4 sm:px-20 xl:px-32 relative inline-flex flex-col w-full justify-center bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat min-h-screen'>
-      <div className='text-center mb-6'>
-        <h1 className='text-3xl sm:text-5xl md:text-6xl 2xl:text-7xl font-semibold mx-auto leading-[1.2]'>Create amazing content <br/> with <span className='text-primary'> AI tools</span></h1>
-        <p>Transfer your content with suitable premium Ai tools....</p>
-      </div>
 
-      <div className='flex flex-wrap justify-center gap-4 text-sm max-sm:text-xs'>
-        <button onClick={()=>navigate('/ai')} className='bg-primary text-white px-10 py-3 rounded-lg hover:scale-102 active:scale-95 transition cursor-pointer'>Start creating now</button>
-        <button className='text-primary bg-white px-10 py-3 rounded-lg hover:scale-102 active:scale-95 transition cursor-pointer'>Watch demo</button>
-      </div>
-      <div className='flex items-center gap-4 mt-8 mx-auto text-gray-600'>
-        <img src={assets.user_group} alt="" className='h-8' />Trusted by 10k+ people
+  return (
+    <div className="px-4 sm:px-20 xl:px-32 bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat min-h-screen flex items-center">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full">
+
+        {/* LEFT SIDE */}
+        <div className="flex flex-col justify-center text-center lg:text-left">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold leading-[1.2]">
+            Transform your ideas into stunning <br />
+            content using <span className="text-primary">AIzen</span>
+          </h1>
+
+          <p className="mt-4 text-gray-700">
+            Create more. Work less. Let AI do the heavy lifting...
+          </p>
+
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-6">
+            <button
+              onClick={() => navigate('/ai')}
+              className="bg-primary text-white px-10 py-3 rounded-lg hover:scale-105 active:scale-95 transition"
+            >
+              Start creating now
+            </button>
+
+            <button className="text-primary bg-white px-10 py-3 rounded-lg hover:scale-105 active:scale-95 transition">
+              Watch demo
+            </button>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE IMAGE */}
+        <div className="flex justify-center items-center">
+          <img
+            src={assets.mt}
+            alt="Hero Illustration"
+            className="max-h-[450px] w-xl object-cover rounded-xl drop-shadow-xl"
+          />
+        </div>
+
       </div>
     </div>
   )

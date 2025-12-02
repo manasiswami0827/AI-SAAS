@@ -1,27 +1,30 @@
 import express from 'express';
 import cors from 'cors';
 import "dotenv/config";
-import { clerkMiddleware, requireAuth } from '@clerk/express'
+import { clerkMiddleware } from '@clerk/express';
 import aiRouter from './routes/aiRoutes.js';
-import { connectCloudinary } from "./configs/cloudinary.js"
 import userRouter from './routes/userRoutes.js';
-const app = express()
+import { connectCloudinary } from "./configs/cloudinary.js";
+
+const app = express();
 
 await connectCloudinary();
 
-app.use(cors())
-app.use(express.json())
-app.use(clerkMiddleware())
+app.use(cors());
+app.use(express.json());
 
-app.get('/',(req, res) =>res.send('Server is Live!'))
+// clerk auth middleware
+app.use(clerkMiddleware());
 
-app.use(requireAuth())
+// test route
+app.get('/', (req, res) => res.send("Server is live!"));
 
-app.use('/api/ai',aiRouter)
-app.use('/api/user',userRouter)
+// your custom middleware (attaches plan + free_usage)
+import { auth } from "./middlewares/auth.js";
+
+// protected routes
+app.use("/api/ai", auth, aiRouter);
+app.use("/api/user", auth, userRouter);
 
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT,()=>{
-    console.log('server is running on port', PORT);
-})
+app.listen(PORT, () => console.log("Server running on", PORT));

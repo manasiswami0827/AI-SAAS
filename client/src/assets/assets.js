@@ -5,10 +5,10 @@ import star_icon from "./star_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
 import profile_img_1 from "./profile_img_1.png";
 import arrow_icon from "./arrow_icon.svg";
-import { SquarePen, Hash, Image, Eraser, Scissors, FileText } from 'lucide-react'
-import ai_gen_img_1 from "./ai_gen_img_1.png";
-import ai_gen_img_2 from "./ai_gen_img_2.png";
-import ai_gen_img_3 from "./ai_gen_img_3.png";
+import { SquarePen, Hash, Image, Eraser, Scissors, FileText } from 'lucide-react';
+import logoAI from "./logoAI.jpg";
+import lg from "./lg.png";
+import mt from "./mt.jpeg";
 
 export const assets = {
     logo,
@@ -18,6 +18,9 @@ export const assets = {
     star_dull_icon,
     profile_img_1,
     arrow_icon,
+    logoAI,
+    lg,
+    mt
 };
 
 export const AiToolsData = [

@@ -24,13 +24,14 @@ const WriteArticle = () => {
    const {getToken} = useAuth()
 
   const onSubmitHandler = async (e) => {
+     const token = await getToken();
     e.preventDefault();
     try{
       setLoading(true)
       const prompt = `Write an article about ${input} in ${selectedLength.text}`
 
       const {data} = await axios.post('/api/ai/generate-article',{prompt,length:selectedLength.length},{
-        headers: {Authorization:  `Bearer ${await getToken()}`}
+        headers: {Authorization: `Bearer ${token}`,  }
       })
       if(data.success){
         setContent(data.content)

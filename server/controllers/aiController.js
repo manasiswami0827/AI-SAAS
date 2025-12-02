@@ -18,7 +18,7 @@ const AI = new OpenAI({
 export const generateArticle = async (req, res)=>{
 
     try{
-        const {userId} = req.auth();
+       const userId = req.auth.userId;
         const {prompt, length} =req.body;
         const plan = req.plan;
         const free_usage = req.free_usage;
@@ -62,7 +62,7 @@ if(plan !== 'premium'){
 export const generateBlogTitle = async (req, res)=>{
 
     try{
-        const {userId} = req.auth();
+        const userId = req.auth.userId;
         const {prompt, length} =req.body;
         const plan = req.plan;
         const free_usage = req.free_usage;
