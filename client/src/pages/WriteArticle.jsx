@@ -50,7 +50,7 @@ const WriteArticle = () => {
       <form onSubmit={onSubmitHandler} action="" className='w-full max-w-lg p-4 bg-white rounded-lg border border-gray-200'>
         <div className='flex items-center gap-3'>
           <Sparkles className='w-6 text-[#a204a7]' />
-          <h1 className='text-xl font-semibold'>Artical Wrtiter</h1>
+          <h1 className='text-xl font-semibold'>Article Writer</h1>
         </div>
         <p className='mt-6 text-sm font-medium'>Article Topic</p>
 
