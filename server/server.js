@@ -11,7 +11,7 @@ const app = express();
 
 await connectCloudinary();
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors());
 app.use(express.json());
 
 // clerk auth middleware
